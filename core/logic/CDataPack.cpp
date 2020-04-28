@@ -65,12 +65,13 @@ CDataPack::Free(CDataPack *pack)
 
 void CDataPack::Initialize()
 {
+	position = 0;
+
 	do
 	{
 	} while (this->RemoveItem());
 
 	elements.clear();
-	position = 0;
 }
 
 void CDataPack::ResetSize()
@@ -228,7 +229,7 @@ bool CDataPack::RemoveItem(size_t pos)
 	{
 		case CDataPackType::Raw:
 		{
-			delete elements[pos].pData.vval;
+			delete [] elements[pos].pData.vval;
 			break;
 		}
 
