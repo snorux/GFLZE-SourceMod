@@ -1,33 +1,33 @@
 /**
- * vim: set ts=4 :
- * =============================================================================
- * SourceMod
- * Copyright (C) 2004-2008 AlliedModders LLC.  All rights reserved.
- * =============================================================================
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, version 3.0, as published by the
- * Free Software Foundation.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * As a special exception, AlliedModders LLC gives you permission to link the
- * code of this program (as well as its derivative works) to "Half-Life 2," the
- * "Source Engine," the "SourcePawn JIT," and any Game MODs that run on software
- * by the Valve Corporation.  You must obey the GNU General Public License in
- * all respects for all other code used.  Additionally, AlliedModders LLC grants
- * this exception to all derivative works.  AlliedModders LLC defines further
- * exceptions, found in LICENSE.txt (as of this writing, version JULY-31-2007),
- * or <http://www.sourcemod.net/license.php>.
- *
- * Version: $Id$
- */
+* vim: set ts=4 :
+* =============================================================================
+* SourceMod
+* Copyright (C) 2004-2008 AlliedModders LLC.  All rights reserved.
+* =============================================================================
+*
+* This program is free software; you can redistribute it and/or modify it under
+* the terms of the GNU General Public License, version 3.0, as published by the
+* Free Software Foundation.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* You should have received a copy of the GNU General Public License along with
+* this program.  If not, see <http://www.gnu.org/licenses/>.
+*
+* As a special exception, AlliedModders LLC gives you permission to link the
+* code of this program (as well as its derivative works) to "Half-Life 2," the
+* "Source Engine," the "SourcePawn JIT," and any Game MODs that run on software
+* by the Valve Corporation.  You must obey the GNU General Public License in
+* all respects for all other code used.  Additionally, AlliedModders LLC grants
+* this exception to all derivative works.  AlliedModders LLC defines further
+* exceptions, found in LICENSE.txt (as of this writing, version JULY-31-2007),
+* or <http://www.sourcemod.net/license.php>.
+*
+* Version: $Id$
+*/
 
 #include "common_logic.h"
 #include <sh_stack.h>
@@ -46,23 +46,23 @@
 #endif
 
 /**
- * And God said, "let there be menus," and behold, there were menus.  
- * God saw the menus and they were good.  And the evening and the morning
- * were the third day.
- */
+* And God said, "let there be menus," and behold, there were menus.
+* God saw the menus and they were good.  And the evening and the morning
+* were the third day.
+*/
 
 enum MenuAction
 {
-	MenuAction_Start = (1<<0),		/**< A menu has been started (nothing passed) */
-	MenuAction_Display = (1<<1),	/**< A menu is about to be displayed (param1=client, param2=MenuPanel Handle) */
-	MenuAction_Select = (1<<2),		/**< An item was selected (param1=client, param2=item) */
-	MenuAction_Cancel = (1<<3),		/**< The menu was cancelled (param1=client, param2=item) */
-	MenuAction_End = (1<<4),		/**< A menu's display/selection cycle is complete (nothing passed). */
-	MenuAction_VoteEnd = (1<<5),	/**< (VOTE ONLY): A vote sequence has ended (param1=chosen item) */
-	MenuAction_VoteStart = (1<<6), 	/**< (VOTE ONLY): A vote sequence has started */
-	MenuAction_VoteCancel = (1<<7),	/**< (VOTE ONLY): A vote sequence has been cancelled (nothing passed) */
-	MenuAction_DrawItem = (1<<8),	/**< A style is being drawn; return the new style (param1=client, param2=item) */
-	MenuAction_DisplayItem = (1<<9),	/**< the odd duck */
+	MenuAction_Start = (1 << 0),		/**< A menu has been started (nothing passed) */
+	MenuAction_Display = (1 << 1),	/**< A menu is about to be displayed (param1=client, param2=MenuPanel Handle) */
+	MenuAction_Select = (1 << 2),		/**< An item was selected (param1=client, param2=item) */
+	MenuAction_Cancel = (1 << 3),		/**< The menu was cancelled (param1=client, param2=item) */
+	MenuAction_End = (1 << 4),		/**< A menu's display/selection cycle is complete (nothing passed). */
+	MenuAction_VoteEnd = (1 << 5),	/**< (VOTE ONLY): A vote sequence has ended (param1=chosen item) */
+	MenuAction_VoteStart = (1 << 6), 	/**< (VOTE ONLY): A vote sequence has started */
+	MenuAction_VoteCancel = (1 << 7),	/**< (VOTE ONLY): A vote sequence has been cancelled (nothing passed) */
+	MenuAction_DrawItem = (1 << 8),	/**< A style is being drawn; return the new style (param1=client, param2=item) */
+	MenuAction_DisplayItem = (1 << 9),	/**< the odd duck */
 };
 
 static HandleError ReadMenuHandle(Handle_t handle, IBaseMenu **menu)
@@ -146,7 +146,7 @@ public:
 	void OnMenuDisplayItem(IBaseMenu *menu, int client, unsigned int item, const char **display);
 #endif
 private:
-	cell_t DoAction(IBaseMenu *menu, MenuAction action, cell_t param1, cell_t param2, cell_t def_res=0);
+	cell_t DoAction(IBaseMenu *menu, MenuAction action, cell_t param1, cell_t param2, cell_t def_res = 0);
 private:
 	IPluginFunction *m_pBasic;
 	int m_Flags;
@@ -155,10 +155,10 @@ private:
 };
 
 /**
- * GLOBAL CLASS FOR HELPERS
- */
+* GLOBAL CLASS FOR HELPERS
+*/
 
-class MenuNativeHelpers : 
+class MenuNativeHelpers :
 	public SMGlobalClass,
 	public IHandleTypeDispatch,
 	public IPluginsListener
@@ -208,13 +208,13 @@ public:
 	}
 
 	/**
-	 * It is extremely important that unloaded plugins don't crash.
-	 * Thus, if a plugin unloads, we run through every handler we have.
-	 * This means we do almost no runtime work for keeping track of
-	 * our panel handlers (we don't have to store a list of the running 
-	 * ones), but when push comes to shove, we have to scan them all
-	 * in case any of them are active.
-	 */
+	* It is extremely important that unloaded plugins don't crash.
+	* Thus, if a plugin unloads, we run through every handler we have.
+	* This means we do almost no runtime work for keeping track of
+	* our panel handlers (we don't have to store a list of the running
+	* ones), but when push comes to shove, we have to scan them all
+	* in case any of them are active.
+	*/
 	virtual void OnPluginUnloaded(IPlugin *plugin)
 	{
 		for (size_t i = 0; i < m_PanelHandlers.size(); i++)
@@ -244,7 +244,8 @@ public:
 		{
 			handler = new CPanelHandler;
 			m_PanelHandlers.push_back(handler);
-		} else {
+		}
+		else {
 			handler = m_FreePanelHandlers.front();
 			m_FreePanelHandlers.pop();
 		}
@@ -266,7 +267,8 @@ public:
 		if (m_FreeMenuHandlers.empty())
 		{
 			handler = new CMenuHandler(pFunction, flags);
-		} else {
+		}
+		else {
 			handler = m_FreeMenuHandlers.front();
 			m_FreeMenuHandlers.pop();
 			handler->m_pBasic = pFunction;
@@ -290,8 +292,8 @@ private:
 } g_MenuHelpers;
 
 /**
- * BASIC PANEL HANDLER WRAPPER
- */
+* BASIC PANEL HANDLER WRAPPER
+*/
 
 void CPanelHandler::OnMenuCancel(IBaseMenu *menu, int client, MenuCancelReason reason)
 {
@@ -327,9 +329,9 @@ static const ItemDrawInfo *s_CurDrawInfo = NULL;
 static unsigned int *s_CurSelectPosition = NULL;
 
 /**
- * MENU HANDLER WRAPPER
- */
-CMenuHandler::CMenuHandler(IPluginFunction *pBasic, int flags) : 
+* MENU HANDLER WRAPPER
+*/
+CMenuHandler::CMenuHandler(IPluginFunction *pBasic, int flags) :
 	m_pBasic(pBasic), m_Flags(flags), m_pVoteResults(NULL)
 {
 	/* :TODO: We can probably cache the handle ahead of time */
@@ -350,10 +352,10 @@ void CMenuHandler::OnMenuDisplay(IBaseMenu *menu, int client, IMenuPanel *panel)
 		HandleSecurity sec;
 		sec.pIdentity = g_pCoreIdent;
 		sec.pOwner = m_pBasic->GetParentContext()->GetIdentity();
-	
+
 		HandleAccess access;
 		handlesys->InitAccessDefaults(NULL, &access);
-		access.access[HandleAccess_Delete] = HANDLE_RESTRICT_IDENTITY|HANDLE_RESTRICT_OWNER;
+		access.access[HandleAccess_Delete] = HANDLE_RESTRICT_IDENTITY | HANDLE_RESTRICT_OWNER;
 
 		Handle_t hndl = handlesys->CreateHandleEx(g_MenuHelpers.GetTempPanelType(), panel, &sec, &access, NULL);
 
@@ -415,10 +417,10 @@ void CMenuHandler::OnMenuDrawItem(IBaseMenu *menu, int client, unsigned int item
 }
 
 unsigned int CMenuHandler::OnMenuDisplayItem(IBaseMenu *menu,
-									 int client,
-									 IMenuPanel *panel,
-									 unsigned int item,
-									 const ItemDrawInfo &dr)
+	int client,
+	IMenuPanel *panel,
+	unsigned int item,
+	const ItemDrawInfo &dr)
 {
 	if ((m_Flags & (int)MenuAction_DisplayItem) == (int)MenuAction_DisplayItem)
 	{
@@ -471,7 +473,7 @@ void CMenuHandler::OnMenuVoteResults(IBaseMenu *menu, const menu_vote_result_t *
 	{
 		/* Call MenuAction_VoteEnd instead.  See if there are any extra winners. */
 		unsigned int num_items = 1;
-		for (unsigned int i=1; i<results->num_items; i++)
+		for (unsigned int i = 1; i<results->num_items; i++)
 		{
 			if (results->item_list[i].count != results->item_list[0].count)
 			{
@@ -488,7 +490,8 @@ void CMenuHandler::OnMenuVoteResults(IBaseMenu *menu, const menu_vote_result_t *
 			srand(time(NULL));
 			winning_item = rand() % num_items;
 			winning_item = results->item_list[winning_item].item;
-		} else {
+		}
+		else {
 			/* No, take the first. */
 			winning_item = results->item_list[0].item;
 		}
@@ -497,7 +500,8 @@ void CMenuHandler::OnMenuVoteResults(IBaseMenu *menu, const menu_vote_result_t *
 		unsigned int winning_votes = results->item_list[0].count;
 
 		DoAction(menu, MenuAction_VoteEnd, winning_item, (total_votes << 16) | (winning_votes & 0xFFFF));
-	} else {
+	}
+	else {
 		IPluginContext *pContext = m_pVoteResults->GetParentContext();
 		bool no_call = false;
 		int err;
@@ -513,11 +517,12 @@ void CMenuHandler::OnMenuVoteResults(IBaseMenu *menu, const menu_vote_result_t *
 			{
 				g_DbgReporter.GenerateError(pContext, m_fnVoteResult, err, "Menu callback could not allocate %d bytes for client list.", client_array_size * sizeof(cell_t));
 				no_call = true;
-			} else {
+			}
+			else {
 				cell_t target_offs = sizeof(cell_t) * results->num_clients;
 				cell_t *cur_index = client_array_base;
 				cell_t *cur_array;
-				for (unsigned int i=0; i<results->num_clients; i++)
+				for (unsigned int i = 0; i<results->num_clients; i++)
 				{
 					/* Copy the array index */
 					*cur_index = target_offs;
@@ -527,8 +532,8 @@ void CMenuHandler::OnMenuVoteResults(IBaseMenu *menu, const menu_vote_result_t *
 					cur_array[0] = results->client_list[i].client;
 					cur_array[1] = results->client_list[i].item;
 					/* Adjust for the new target by subtracting one indirection
-					 * and adding one array.
-					 */
+					* and adding one array.
+					*/
 					target_offs += (sizeof(cell_t) * 2) - sizeof(cell_t);
 					cur_index++;
 				}
@@ -546,11 +551,12 @@ void CMenuHandler::OnMenuVoteResults(IBaseMenu *menu, const menu_vote_result_t *
 			{
 				g_DbgReporter.GenerateError(pContext, m_fnVoteResult, err, "Menu callback could not allocate %d bytes for item list.", item_array_size);
 				no_call = true;
-			} else {
+			}
+			else {
 				cell_t target_offs = sizeof(cell_t) * results->num_items;
 				cell_t *cur_index = item_array_base;
 				cell_t *cur_array;
-				for (unsigned int i=0; i<results->num_items; i++)
+				for (unsigned int i = 0; i<results->num_items; i++)
 				{
 					/* Copy the array index */
 					*cur_index = target_offs;
@@ -560,8 +566,8 @@ void CMenuHandler::OnMenuVoteResults(IBaseMenu *menu, const menu_vote_result_t *
 					cur_array[0] = results->item_list[i].item;
 					cur_array[1] = results->item_list[i].count;
 					/* Adjust for the new target by subtracting one indirection
-					 * and adding one array.
-					 */
+					* and adding one array.
+					*/
 					target_offs += (sizeof(cell_t) * 2) - sizeof(cell_t);
 					cur_index++;
 				}
@@ -606,8 +612,8 @@ bool CMenuHandler::OnSetHandlerOption(const char *option, const void *data)
 }
 
 /**
- * INLINE FUNCTIONS FOR NATIVES
- */
+* INLINE FUNCTIONS FOR NATIVES
+*/
 
 inline Handle_t MakePanelHandle(IMenuPanel *panel, IPluginContext *pContext)
 {
@@ -634,8 +640,9 @@ inline IMenuStyle *GetStyleFromCell(cell_t cell)
 	if (cell == MenuStyle_Valve)
 	{
 		return &ValveMenuStyle();
-	} else if (cell == MenuStyle_Radio
-			   && RadioMenuStyle().IsSupported())
+	}
+	else if (cell == MenuStyle_Radio
+		&& RadioMenuStyle().IsSupported())
 	{
 		return &RadioMenuStyle();
 	}
@@ -644,15 +651,15 @@ inline IMenuStyle *GetStyleFromCell(cell_t cell)
 }
 
 /***********************************
- **** NATIVE DEFINITIONS ***********
- ***********************************/
+**** NATIVE DEFINITIONS ***********
+***********************************/
 
 static cell_t CreateMenu(IPluginContext *pContext, const cell_t *params)
 {
 	IMenuStyle *style = menus->GetDefaultStyle();
 	IPluginFunction *pFunction;
 
-	if ((pFunction=pContext->GetFunctionById(params[1])) == NULL)
+	if ((pFunction = pContext->GetFunctionById(params[1])) == NULL)
 	{
 		return pContext->ThrowNativeError("Function id %x is invalid", params[1]);
 	}
@@ -816,8 +823,14 @@ static cell_t GetMenuItem(IPluginContext *pContext, const cell_t *params)
 
 	ItemDrawInfo dr;
 	const char *info;
+	cell_t client = (params[0] >= 8) ? params[8] : 0;
+	if (!client && menu->IsPerClientShuffled())
+	{
+		return pContext->ThrowNativeError("This menu has been per-client random shuffled. "
+			"You have to call GetMenuItem with a client index!");
+	}
 
-	if ((info=menu->GetItemInfo(params[2], &dr)) == NULL)
+	if ((info = menu->GetItemInfo(params[2], &dr, client)) == NULL)
 	{
 		return 0;
 	}
@@ -828,6 +841,57 @@ static cell_t GetMenuItem(IPluginContext *pContext, const cell_t *params)
 	cell_t *addr;
 	pContext->LocalToPhysAddr(params[5], &addr);
 	*addr = dr.style;
+
+	return 1;
+}
+
+static cell_t MenuShufflePerClient(IPluginContext *pContext, const cell_t *params)
+{
+	Handle_t hndl = (Handle_t)params[1];
+	HandleError err;
+	IBaseMenu *menu;
+
+	if ((err = ReadMenuHandle(params[1], &menu)) != HandleError_None)
+	{
+		return pContext->ThrowNativeError("Menu handle %x is invalid (error %d)", hndl, err);
+	}
+
+	int start = params[2];
+	int stop = params[3];
+
+	if (stop > 0 && !(stop >= start))
+	{
+		return pContext->ThrowNativeError("Stop must be -1 or >= start!");
+	}
+
+	menu->ShufflePerClient(start, stop);
+
+	return 1;
+}
+
+static cell_t MenuSetClientMapping(IPluginContext *pContext, const cell_t *params)
+{
+	Handle_t hndl = (Handle_t)params[1];
+	HandleError err;
+	IBaseMenu *menu;
+
+	if ((err = ReadMenuHandle(params[1], &menu)) != HandleError_None)
+	{
+		return pContext->ThrowNativeError("Menu handle %x is invalid (error %d)", hndl, err);
+	}
+
+	int client = params[2];
+	if (client < 1 || client > SM_MAXPLAYERS)
+	{
+		return pContext->ThrowNativeError("Invalid client index!");
+	}
+
+	cell_t *array;
+	pContext->LocalToPhysAddr(params[3], &array);
+
+	int length = params[4];
+
+	menu->SetClientMapping(client, array, length);
 
 	return 1;
 }
@@ -977,7 +1041,8 @@ static cell_t SetMenuExitButton(IPluginContext *pContext, const cell_t *params)
 	if (params[2])
 	{
 		flags |= MENUFLAG_BUTTON_EXIT;
-	} else {
+	}
+	else {
 		flags &= ~MENUFLAG_BUTTON_EXIT;
 	}
 
@@ -1003,7 +1068,8 @@ static cell_t SetMenuNoVoteButton(IPluginContext *pContext, const cell_t *params
 	if (params[2])
 	{
 		flags |= MENUFLAG_BUTTON_NOVOTE;
-	} else {
+	}
+	else {
 		flags &= ~MENUFLAG_BUTTON_NOVOTE;
 	}
 
@@ -1029,7 +1095,8 @@ static cell_t SetMenuExitBackButton(IPluginContext *pContext, const cell_t *para
 	if (params[2])
 	{
 		flags |= MENUFLAG_BUTTON_EXITBACK;
-	} else {
+	}
+	else {
 		flags &= ~MENUFLAG_BUTTON_EXITBACK;
 	}
 
@@ -1096,7 +1163,8 @@ static cell_t CreatePanel(IPluginContext *pContext, const cell_t *params)
 		{
 			return pContext->ThrowNativeError("MenuStyle handle %x is invalid (error %d)", hndl, err);
 		}
-	} else {
+	}
+	else {
 		style = menus->GetDefaultStyle();
 	}
 
@@ -1124,12 +1192,13 @@ static cell_t CreateMenuEx(IPluginContext *pContext, const cell_t *params)
 		{
 			return pContext->ThrowNativeError("MenuStyle handle %x is invalid (error %d)", hndl, err);
 		}
-	} else {
+	}
+	else {
 		style = menus->GetDefaultStyle();
 	}
 
 	IPluginFunction *pFunction;
-	if ((pFunction=pContext->GetFunctionById(params[2])) == NULL)
+	if ((pFunction = pContext->GetFunctionById(params[2])) == NULL)
 	{
 		return pContext->ThrowNativeError("Function id %x is invalid", params[2]);
 	}
@@ -1159,7 +1228,8 @@ static cell_t GetClientMenu(IPluginContext *pContext, const cell_t *params)
 		{
 			return pContext->ThrowNativeError("MenuStyle handle %x is invalid (error %d)", hndl, err);
 		}
-	} else {
+	}
+	else {
 		style = menus->GetDefaultStyle();
 	}
 
@@ -1178,7 +1248,8 @@ static cell_t CancelClientMenu(IPluginContext *pContext, const cell_t *params)
 		{
 			return pContext->ThrowNativeError("MenuStyle handle %x is invalid (error %d)", hndl, err);
 		}
-	} else {
+	}
+	else {
 		style = menus->GetDefaultStyle();
 	}
 
@@ -1197,7 +1268,8 @@ static cell_t GetMaxPageItems(IPluginContext *pContext, const cell_t *params)
 		{
 			return pContext->ThrowNativeError("MenuStyle handle %x is invalid (error %d)", hndl, err);
 		}
-	} else {
+	}
+	else {
 		style = menus->GetDefaultStyle();
 	}
 
@@ -1210,7 +1282,7 @@ static cell_t GetPanelStyle(IPluginContext *pContext, const cell_t *params)
 	HandleError err;
 	IMenuPanel *panel;
 
-	if ((err=ReadPanelHandle(hndl, &panel)) != HandleError_None)
+	if ((err = ReadPanelHandle(hndl, &panel)) != HandleError_None)
 	{
 		return pContext->ThrowNativeError("Menu handle %x is invalid (error %d)", hndl, err);
 	}
@@ -1224,7 +1296,7 @@ static cell_t SetPanelTitle(IPluginContext *pContext, const cell_t *params)
 	HandleError err;
 	IMenuPanel *panel;
 
-	if ((err=ReadPanelHandle(hndl, &panel)) != HandleError_None)
+	if ((err = ReadPanelHandle(hndl, &panel)) != HandleError_None)
 	{
 		return pContext->ThrowNativeError("Menu handle %x is invalid (error %d)", hndl, err);
 	}
@@ -1243,7 +1315,7 @@ static cell_t DrawPanelItem(IPluginContext *pContext, const cell_t *params)
 	HandleError err;
 	IMenuPanel *panel;
 
-	if ((err=ReadPanelHandle(hndl, &panel)) != HandleError_None)
+	if ((err = ReadPanelHandle(hndl, &panel)) != HandleError_None)
 	{
 		return pContext->ThrowNativeError("Menu handle %x is invalid (error %d)", hndl, err);
 	}
@@ -1261,7 +1333,7 @@ static cell_t DrawPanelText(IPluginContext *pContext, const cell_t *params)
 	HandleError err;
 	IMenuPanel *panel;
 
-	if ((err=ReadPanelHandle(hndl, &panel)) != HandleError_None)
+	if ((err = ReadPanelHandle(hndl, &panel)) != HandleError_None)
 	{
 		return pContext->ThrowNativeError("Menu handle %x is invalid (error %d)", hndl, err);
 	}
@@ -1278,7 +1350,7 @@ static cell_t CanPanelDrawFlags(IPluginContext *pContext, const cell_t *params)
 	HandleError err;
 	IMenuPanel *panel;
 
-	if ((err=ReadPanelHandle(hndl, &panel)) != HandleError_None)
+	if ((err = ReadPanelHandle(hndl, &panel)) != HandleError_None)
 	{
 		return pContext->ThrowNativeError("Menu handle %x is invalid (error %d)", hndl, err);
 	}
@@ -1292,13 +1364,13 @@ static cell_t SendPanelToClient(IPluginContext *pContext, const cell_t *params)
 	HandleError err;
 	IMenuPanel *panel;
 
-	if ((err=ReadPanelHandle(hndl, &panel)) != HandleError_None)
+	if ((err = ReadPanelHandle(hndl, &panel)) != HandleError_None)
 	{
 		return pContext->ThrowNativeError("Menu handle %x is invalid (error %d)", hndl, err);
 	}
 
 	IPluginFunction *pFunction;
-	if ((pFunction=pContext->GetFunctionById(params[3])) == NULL)
+	if ((pFunction = pContext->GetFunctionById(params[3])) == NULL)
 	{
 		return pContext->ThrowNativeError("Function id %x is invalid", params[3]);
 	}
@@ -1318,7 +1390,7 @@ static cell_t SetPanelKeys(IPluginContext *pContext, const cell_t *params)
 	HandleError err;
 	IMenuPanel *panel;
 
-	if ((err=ReadPanelHandle(hndl, &panel)) != HandleError_None)
+	if ((err = ReadPanelHandle(hndl, &panel)) != HandleError_None)
 	{
 		return pContext->ThrowNativeError("Menu handle %x is invalid (error %d)", hndl, err);
 	}
@@ -1332,7 +1404,7 @@ static cell_t GetPanelCurrentKey(IPluginContext *pContext, const cell_t *params)
 	HandleError err;
 	IMenuPanel *panel;
 
-	if ((err=ReadPanelHandle(hndl, &panel)) != HandleError_None)
+	if ((err = ReadPanelHandle(hndl, &panel)) != HandleError_None)
 	{
 		return pContext->ThrowNativeError("Menu handle %x is invalid (error %d)", hndl, err);
 	}
@@ -1346,7 +1418,7 @@ static cell_t GetPanelTextRemaining(IPluginContext *pContext, const cell_t *para
 	HandleError err;
 	IMenuPanel *panel;
 
-	if ((err=ReadPanelHandle(hndl, &panel)) != HandleError_None)
+	if ((err = ReadPanelHandle(hndl, &panel)) != HandleError_None)
 	{
 		return pContext->ThrowNativeError("Menu handle %x is invalid (error %d)", hndl, err);
 	}
@@ -1360,7 +1432,7 @@ static cell_t SetPanelCurrentKey(IPluginContext *pContext, const cell_t *params)
 	HandleError err;
 	IMenuPanel *panel;
 
-	if ((err=ReadPanelHandle(hndl, &panel)) != HandleError_None)
+	if ((err = ReadPanelHandle(hndl, &panel)) != HandleError_None)
 	{
 		return pContext->ThrowNativeError("Menu handle %x is invalid (error %d)", hndl, err);
 	}
@@ -1597,96 +1669,99 @@ static cell_t InternalShowMenu(IPluginContext *pContext, const cell_t *params)
 
 REGISTER_NATIVES(menuNatives)
 {
-	{"AddMenuItem",				AddMenuItem},
-	{"CanPanelDrawFlags",		CanPanelDrawFlags},
-	{"CancelClientMenu",		CancelClientMenu},
-	{"CancelMenu",				CancelMenu},
-	{"CancelVote",				CancelVote},
-	{"CheckVoteDelay",			CheckVoteDelay},
-	{"CreateMenu",				CreateMenu},
-	{"CreateMenuEx",			CreateMenuEx},
-	{"CreatePanel",				CreatePanel},
-	{"CreatePanelFromMenu",		CreatePanelFromMenu},
-	{"DisplayMenu",				DisplayMenu},
-	{"DisplayMenuAtItem",		DisplayMenuAtItem},
-	{"DrawPanelItem",			DrawPanelItem},
-	{"DrawPanelText",			DrawPanelText},
-	{"GetClientMenu",			GetClientMenu},
-	{"GetMaxPageItems",			GetMaxPageItems},
-	{"GetMenuExitBackButton",	GetMenuExitBackButton},
-	{"GetMenuExitButton",		GetMenuExitButton},
-	{"GetMenuItem",				GetMenuItem},
-	{"GetMenuItemCount",		GetMenuItemCount},
-	{"GetMenuOptionFlags",		GetMenuOptionFlags},
-	{"GetMenuPagination",		GetMenuPagination},
-	{"GetMenuSelectionPosition",GetMenuSelectionPosition},
-	{"GetMenuStyle",			GetMenuStyle},
-	{"GetMenuStyleHandle",		GetMenuStyleHandle},
-	{"GetMenuTitle",			GetMenuTitle},
-	{"GetPanelTextRemaining",	GetPanelTextRemaining},
-	{"GetPanelCurrentKey",		GetPanelCurrentKey},
-	{"GetPanelStyle",			GetPanelStyle},
-	{"InsertMenuItem",			InsertMenuItem},
-	{"InternalShowMenu",		InternalShowMenu},
-	{"IsClientInVotePool",		IsClientInVotePool},
-	{"IsVoteInProgress",		IsVoteInProgress},
-	{"RedrawClientVoteMenu",	RedrawClientVoteMenu},
-	{"RedrawMenuItem",			RedrawMenuItem},
-	{"RemoveAllMenuItems",		RemoveAllMenuItems},
-	{"RemoveMenuItem",			RemoveMenuItem},
-	{"SendPanelToClient",		SendPanelToClient},
-	{"SetMenuExitBackButton",	SetMenuExitBackButton},
-	{"SetMenuExitButton",		SetMenuExitButton},
-	{"SetMenuOptionFlags",		SetMenuOptionFlags},
-	{"SetMenuPagination",		SetMenuPagination},
-	{"SetMenuTitle",			SetMenuTitle},
-	{"SetPanelCurrentKey",		SetPanelCurrentKey},
-	{"SetPanelTitle",			SetPanelTitle},
-	{"SetPanelKeys",			SetPanelKeys},
-	{"SetVoteResultCallback",	SetVoteResultCallback},
-	{"VoteMenu",				VoteMenu},
-	{"SetMenuNoVoteButton",		SetMenuNoVoteButton},
+	{"AddMenuItem", AddMenuItem},
+	{ "CanPanelDrawFlags",		CanPanelDrawFlags },
+	{ "CancelClientMenu",		CancelClientMenu },
+	{ "CancelMenu",				CancelMenu },
+	{ "CancelVote",				CancelVote },
+	{ "CheckVoteDelay",			CheckVoteDelay },
+	{ "CreateMenu",				CreateMenu },
+	{ "CreateMenuEx",			CreateMenuEx },
+	{ "CreatePanel",				CreatePanel },
+	{ "CreatePanelFromMenu",		CreatePanelFromMenu },
+	{ "DisplayMenu",				DisplayMenu },
+	{ "DisplayMenuAtItem",		DisplayMenuAtItem },
+	{ "DrawPanelItem",			DrawPanelItem },
+	{ "DrawPanelText",			DrawPanelText },
+	{ "GetClientMenu",			GetClientMenu },
+	{ "GetMaxPageItems",			GetMaxPageItems },
+	{ "GetMenuExitBackButton",	GetMenuExitBackButton },
+	{ "GetMenuExitButton",		GetMenuExitButton },
+	{ "GetMenuItem",				GetMenuItem },
+	{ "GetMenuItemCount",		GetMenuItemCount },
+	{ "GetMenuOptionFlags",		GetMenuOptionFlags },
+	{ "GetMenuPagination",		GetMenuPagination },
+	{ "GetMenuSelectionPosition",GetMenuSelectionPosition },
+	{ "GetMenuStyle",			GetMenuStyle },
+	{ "GetMenuStyleHandle",		GetMenuStyleHandle },
+	{ "GetMenuTitle",			GetMenuTitle },
+	{ "GetPanelTextRemaining",	GetPanelTextRemaining },
+	{ "GetPanelCurrentKey",		GetPanelCurrentKey },
+	{ "GetPanelStyle",			GetPanelStyle },
+	{ "InsertMenuItem",			InsertMenuItem },
+	{ "InternalShowMenu",		InternalShowMenu },
+	{ "IsClientInVotePool",		IsClientInVotePool },
+	{ "IsVoteInProgress",		IsVoteInProgress },
+	{ "RedrawClientVoteMenu",	RedrawClientVoteMenu },
+	{ "RedrawMenuItem",			RedrawMenuItem },
+	{ "RemoveAllMenuItems",		RemoveAllMenuItems },
+	{ "RemoveMenuItem",			RemoveMenuItem },
+	{ "SendPanelToClient",		SendPanelToClient },
+	{ "SetMenuExitBackButton",	SetMenuExitBackButton },
+	{ "SetMenuExitButton",		SetMenuExitButton },
+	{ "SetMenuOptionFlags",		SetMenuOptionFlags },
+	{ "SetMenuPagination",		SetMenuPagination },
+	{ "SetMenuTitle",			SetMenuTitle },
+	{ "SetPanelCurrentKey",		SetPanelCurrentKey },
+	{ "SetPanelTitle",			SetPanelTitle },
+	{ "SetPanelKeys",			SetPanelKeys },
+	{ "SetVoteResultCallback",	SetVoteResultCallback },
+	{ "VoteMenu",				VoteMenu },
+	{ "MenuShufflePerClient",	MenuShufflePerClient },
+	{ "MenuSetClientMapping",	MenuSetClientMapping },
+	{ "SetMenuNoVoteButton",		SetMenuNoVoteButton },
 
-	// Transitional syntax support.
-	{"Panel.Panel",				CreatePanel},
-	{"Panel.TextRemaining.get",	GetPanelTextRemaining},
-	{"Panel.CurrentKey.get",	GetPanelCurrentKey},
-	{"Panel.CurrentKey.set",	SetPanelCurrentKey},
-	{"Panel.Style.get",			GetPanelStyle},
-	{"Panel.CanDrawFlags",		CanPanelDrawFlags},
-	{"Panel.SetTitle",			SetPanelTitle},
-	{"Panel.SetKeys",			SetPanelKeys},
-	{"Panel.Send",				SendPanelToClient},
-	{"Panel.DrawItem",			DrawPanelItem},
-	{"Panel.DrawText",			DrawPanelText},
+		// Transitional syntax support.
+	{ "Panel.Panel",				CreatePanel },
+	{ "Panel.TextRemaining.get",	GetPanelTextRemaining },
+	{ "Panel.CurrentKey.get",	GetPanelCurrentKey },
+	{ "Panel.CurrentKey.set",	SetPanelCurrentKey },
+	{ "Panel.Style.get",			GetPanelStyle },
+	{ "Panel.CanDrawFlags",		CanPanelDrawFlags },
+	{ "Panel.SetTitle",			SetPanelTitle },
+	{ "Panel.SetKeys",			SetPanelKeys },
+	{ "Panel.Send",				SendPanelToClient },
+	{ "Panel.DrawItem",			DrawPanelItem },
+	{ "Panel.DrawText",			DrawPanelText },
 
-	{"Menu.Menu",				CreateMenu},
-	{"Menu.Display",			DisplayMenu},
-	{"Menu.DisplayAt",			DisplayMenuAtItem},
-	{"Menu.AddItem",			AddMenuItem},
-	{"Menu.InsertItem",			InsertMenuItem},
-	{"Menu.RemoveItem",			RemoveMenuItem},
-	{"Menu.RemoveAllItems",		RemoveAllMenuItems},
-	{"Menu.GetItem",			GetMenuItem},
-	{"Menu.GetTitle",			GetMenuTitle},
-	{"Menu.SetTitle",			SetMenuTitle},
-	{"Menu.ToPanel",			CreatePanelFromMenu},
-	{"Menu.Cancel",				CancelMenu},
-	{"Menu.DisplayVote",		VoteMenu},
-	{"Menu.Pagination.get",		GetMenuPagination},
-	{"Menu.Pagination.set",		SetMenuPagination},
-	{"Menu.OptionFlags.get",	GetMenuOptionFlags},
-	{"Menu.OptionFlags.set",	SetMenuOptionFlags},
-	{"Menu.ExitButton.get",		GetMenuExitButton},
-	{"Menu.ExitButton.set",		SetMenuExitButton},
-	{"Menu.ExitBackButton.get",	GetMenuExitBackButton},
-	{"Menu.ExitBackButton.set",	SetMenuExitBackButton},
-	{"Menu.NoVoteButton.set",	SetMenuNoVoteButton},
-	{"Menu.VoteResultCallback.set", SetVoteResultCallback},
-	{"Menu.ItemCount.get",		GetMenuItemCount},
-	{"Menu.Style.get",			GetMenuStyle},
-	{"Menu.Selection.get",		GetMenuSelectionPosition},
+	{ "Menu.Menu",				CreateMenu },
+	{ "Menu.Display",			DisplayMenu },
+	{ "Menu.DisplayAt",			DisplayMenuAtItem },
+	{ "Menu.AddItem",			AddMenuItem },
+	{ "Menu.InsertItem",			InsertMenuItem },
+	{ "Menu.RemoveItem",			RemoveMenuItem },
+	{ "Menu.RemoveAllItems",		RemoveAllMenuItems },
+	{ "Menu.GetItem",			GetMenuItem },
+	{ "Menu.GetTitle",			GetMenuTitle },
+	{ "Menu.SetTitle",			SetMenuTitle },
+	{ "Menu.ToPanel",			CreatePanelFromMenu },
+	{ "Menu.Cancel",				CancelMenu },
+	{ "Menu.DisplayVote",		VoteMenu },
+	{ "Menu.ShufflePerClient",	MenuShufflePerClient },
+	{ "Menu.SetClientMapping",	MenuSetClientMapping },
+	{ "Menu.Pagination.get",		GetMenuPagination },
+	{ "Menu.Pagination.set",		SetMenuPagination },
+	{ "Menu.OptionFlags.get",	GetMenuOptionFlags },
+	{ "Menu.OptionFlags.set",	SetMenuOptionFlags },
+	{ "Menu.ExitButton.get",		GetMenuExitButton },
+	{ "Menu.ExitButton.set",		SetMenuExitButton },
+	{ "Menu.ExitBackButton.get",	GetMenuExitBackButton },
+	{ "Menu.ExitBackButton.set",	SetMenuExitBackButton },
+	{ "Menu.NoVoteButton.set",	SetMenuNoVoteButton },
+	{ "Menu.VoteResultCallback.set", SetVoteResultCallback },
+	{ "Menu.ItemCount.get",		GetMenuItemCount },
+	{ "Menu.Style.get",			GetMenuStyle },
+	{ "Menu.Selection.get",		GetMenuSelectionPosition },
 
-	{NULL,						NULL},
+	{ NULL,						NULL },
 };
-

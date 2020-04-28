@@ -1,33 +1,33 @@
 /**
- * vim: set ts=4 sw=4 tw=99 noet :
- * =============================================================================
- * SourceMod
- * Copyright (C) 2004-2008 AlliedModders LLC.  All rights reserved.
- * =============================================================================
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, version 3.0, as published by the
- * Free Software Foundation.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * As a special exception, AlliedModders LLC gives you permission to link the
- * code of this program (as well as its derivative works) to "Half-Life 2," the
- * "Source Engine," the "SourcePawn JIT," and any Game MODs that run on software
- * by the Valve Corporation.  You must obey the GNU General Public License in
- * all respects for all other code used.  Additionally, AlliedModders LLC grants
- * this exception to all derivative works.  AlliedModders LLC defines further
- * exceptions, found in LICENSE.txt (as of this writing, version JULY-31-2007),
- * or <http://www.sourcemod.net/license.php>.
- *
- * Version: $Id$
- */
+* vim: set ts=4 sw=4 tw=99 noet :
+* =============================================================================
+* SourceMod
+* Copyright (C) 2004-2008 AlliedModders LLC.  All rights reserved.
+* =============================================================================
+*
+* This program is free software; you can redistribute it and/or modify it under
+* the terms of the GNU General Public License, version 3.0, as published by the
+* Free Software Foundation.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* You should have received a copy of the GNU General Public License along with
+* this program.  If not, see <http://www.gnu.org/licenses/>.
+*
+* As a special exception, AlliedModders LLC gives you permission to link the
+* code of this program (as well as its derivative works) to "Half-Life 2," the
+* "Source Engine," the "SourcePawn JIT," and any Game MODs that run on software
+* by the Valve Corporation.  You must obey the GNU General Public License in
+* all respects for all other code used.  Additionally, AlliedModders LLC grants
+* this exception to all derivative works.  AlliedModders LLC defines further
+* exceptions, found in LICENSE.txt (as of this writing, version JULY-31-2007),
+* or <http://www.sourcemod.net/license.php>.
+*
+* Version: $Id$
+*/
 
 #include <stdarg.h>
 #include "sm_stringutil.h"
@@ -99,7 +99,7 @@ void BaseMenuStyle::_CancelClientMenu(int client, MenuCancelReason reason, bool 
 
 	/* Fire callbacks */
 	mh->OnMenuCancel(menu, client, reason);
-	
+
 	/* Only fire end if there's a valid menu */
 	if (menu)
 	{
@@ -118,7 +118,7 @@ void BaseMenuStyle::CancelMenu(CBaseMenu *menu)
 	g_Logger.LogMessage("[SM_MENU] CancelMenu() (menu %p)", menu);
 #endif
 	int maxClients = g_Players.GetMaxClients();
-	for (int i=1; i<=maxClients; i++)
+	for (int i = 1; i <= maxClients; i++)
 	{
 		CBaseMenuPlayer *player = GetMenuPlayer(i);
 		if (player->bInMenu)
@@ -165,7 +165,7 @@ MenuSource BaseMenuStyle::GetClientMenu(int client, void **object)
 	if (player->bInMenu)
 	{
 		IBaseMenu *menu;
-		if ((menu=player->states.menu) != NULL)
+		if ((menu = player->states.menu) != NULL)
 		{
 			if (object)
 			{
@@ -175,7 +175,8 @@ MenuSource BaseMenuStyle::GetClientMenu(int client, void **object)
 		}
 
 		return MenuSource_Display;
-	} else if (player->bInExternMenu) {
+	}
+	else if (player->bInExternMenu) {
 		if (player->menuHoldTime != 0
 			&& (gpGlobals->curtime > player->menuStartTime + player->menuHoldTime))
 		{
@@ -214,7 +215,7 @@ void BaseMenuStyle::ProcessWatchList()
 	}
 
 #if defined MENU_DEBUG
-	g_Logger.LogMessage("BaseMenuStyle::ProcessWatchList(%d,%d,%d,%d,%d,%p)", 
+	g_Logger.LogMessage("BaseMenuStyle::ProcessWatchList(%d,%d,%d,%d,%d,%p)",
 		m_WatchList.m_Size,
 		m_WatchList.m_FirstLink,
 		m_WatchList.m_FreeNodes,
@@ -224,7 +225,7 @@ void BaseMenuStyle::ProcessWatchList()
 #endif
 
 	unsigned int total = 0;
-	for (FastLink<int>::iterator iter=m_WatchList.begin(); iter!=m_WatchList.end(); ++iter)
+	for (FastLink<int>::iterator iter = m_WatchList.begin(); iter != m_WatchList.end(); ++iter)
 	{
 		do_lookup[total++] = (*iter);
 	}
@@ -239,7 +240,7 @@ void BaseMenuStyle::ProcessWatchList()
 	int client;
 	CBaseMenuPlayer *player;
 	float curTime = gpGlobals->curtime;
-	for (unsigned int i=0; i<total; i++)
+	for (unsigned int i = 0; i<total; i++)
 	{
 		client = do_lookup[i];
 		player = GetMenuPlayer(client);
@@ -296,13 +297,15 @@ void BaseMenuStyle::ClientPressedKey(int client, unsigned int key_press)
 	if (menu == NULL)
 	{
 		item = key_press;
-	} else if (key_press < 1 || key_press > GetMaxPageItems()) {
+	}
+	else if (key_press < 1 || key_press > GetMaxPageItems()) {
 		cancel = true;
-	} else {
+	}
+	else {
 		ItemSelection type = states.slots[key_press].type;
 
 		/* Check if we should play a sound about the type */
-		if (g_Menus.MenuSoundsEnabled() && 
+		if (g_Menus.MenuSoundsEnabled() &&
 			(!menu || (menu->GetMenuOptionFlags() & MENUFLAG_NO_SOUND) != MENUFLAG_NO_SOUND))
 		{
 			CellRecipientFilter filter;
@@ -323,21 +326,21 @@ void BaseMenuStyle::ClientPressedKey(int client, unsigned int key_press)
 					if (pCollideable)
 					{
 						const Vector & pos = pCollideable->GetCollisionOrigin();
-						enginesound->EmitSound(filter, 
-							client, 
-							CHAN_AUTO, 
+						enginesound->EmitSound(filter,
+							client,
+							CHAN_AUTO,
 #if SOURCE_ENGINE >= SE_PORTAL2
-							sound, 
-							-1, 
+							sound,
+							-1,
 #endif
-							sound, 
-							VOL_NORM, 
-							ATTN_NORM, 
+							sound,
+							VOL_NORM,
+							ATTN_NORM,
 #if SOURCE_ENGINE >= SE_PORTAL2
-							0, 
+							0,
 #endif
-							0, 
-							PITCH_NORM, 
+							0,
+							PITCH_NORM,
 #if SOURCE_ENGINE == SE_CSS || SOURCE_ENGINE == SE_HL2DM || SOURCE_ENGINE == SE_DODS \
 	|| SOURCE_ENGINE == SE_SDK2013 || SOURCE_ENGINE == SE_BMS || SOURCE_ENGINE == SE_TF2
 							0,
@@ -356,27 +359,33 @@ void BaseMenuStyle::ClientPressedKey(int client, unsigned int key_press)
 				cancel = true;
 				reason = MenuCancel_NoDisplay;
 				end_reason = MenuEnd_Cancelled;
-			} else {
+			}
+			else {
 				return;
 			}
-		} else if (type == ItemSel_Next) {
+		}
+		else if (type == ItemSel_Next) {
 			if (!RedoClientMenu(client, ItemOrder_Ascending))
 			{
 				cancel = true;						/* I like Saltines. */
 				reason = MenuCancel_NoDisplay;
 				end_reason = MenuEnd_Cancelled;
-			} else {
+			}
+			else {
 				return;
 			}
-		} else if (type == ItemSel_Exit || type == ItemSel_None) {
+		}
+		else if (type == ItemSel_Exit || type == ItemSel_None) {
 			cancel = true;
 			reason = MenuCancel_Exit;
 			end_reason = MenuEnd_Exit;
-		} else if (type == ItemSel_ExitBack) {
+		}
+		else if (type == ItemSel_ExitBack) {
 			cancel = true;
 			reason = MenuCancel_ExitBack;
 			end_reason = MenuEnd_ExitBack;
-		} else {
+		}
+		else {
 			item = states.slots[key_press].item;
 		}
 	}
@@ -394,7 +403,8 @@ void BaseMenuStyle::ClientPressedKey(int client, unsigned int key_press)
 	if (cancel)
 	{
 		mh->OnMenuCancel(menu, client, reason);
-	} else {
+	}
+	else {
 		mh->OnMenuSelect(menu, client, item);
 		if (mh->GetMenuAPIVersion2() >= 13)
 		{
@@ -469,10 +479,10 @@ bool BaseMenuStyle::DoClientMenu(int client, IMenuPanel *menu, IMenuHandler *mh,
 }
 
 bool BaseMenuStyle::DoClientMenu(int client,
-								 CBaseMenu *menu,
-								 unsigned int first_item,
-								 IMenuHandler *mh,
-								 unsigned int time)
+	CBaseMenu *menu,
+	unsigned int first_item,
+	IMenuHandler *mh,
+	unsigned int time)
 {
 #if defined MENU_DEBUG
 	g_Logger.LogMessage("[SM_MENU] DoClientMenu() (client %d) (menu %p) (mh %p) (time %d)",
@@ -506,10 +516,10 @@ bool BaseMenuStyle::DoClientMenu(int client,
 	}
 
 	/* For the duration of this, we are going to totally ignore whether
-	 * the player is already in a menu or not (except to cancel the old one).
-	 * Instead, we are simply going to ignore any further menu displays, so
-	 * this display can't be interrupted.
-	 */
+	* the player is already in a menu or not (except to cancel the old one).
+	* Instead, we are simply going to ignore any further menu displays, so
+	* this display can't be interrupted.
+	*/
 	player->bAutoIgnore = true;
 
 	/* Cancel any old menus */
@@ -604,10 +614,10 @@ bool BaseMenuStyle::RedoClientMenu(int client, ItemOrder order)
 	return true;
 }
 
-CBaseMenu::CBaseMenu(IMenuHandler *pHandler, IMenuStyle *pStyle, IdentityToken_t *pOwner) : 
-m_pStyle(pStyle), m_Pagination(7), m_bShouldDelete(false), m_bCancelling(false), 
-m_pOwner(pOwner ? pOwner : g_pCoreIdent), m_bDeleting(false), m_bWillFreeHandle(false), 
-m_hHandle(BAD_HANDLE), m_pHandler(pHandler), m_nFlags(MENUFLAG_BUTTON_EXIT)
+CBaseMenu::CBaseMenu(IMenuHandler *pHandler, IMenuStyle *pStyle, IdentityToken_t *pOwner) :
+	m_pStyle(pStyle), m_Pagination(7), m_bShouldDelete(false), m_bCancelling(false),
+	m_pOwner(pOwner ? pOwner : g_pCoreIdent), m_bDeleting(false), m_bWillFreeHandle(false),
+	m_hHandle(BAD_HANDLE), m_pHandler(pHandler), m_nFlags(MENUFLAG_BUTTON_EXIT)
 {
 }
 
@@ -633,7 +643,7 @@ bool CBaseMenu::AppendItem(const char *info, const ItemDrawInfo &draw)
 		return false;
 	}
 
-	CItem item;
+	CItem item(m_items.length());
 
 	item.info = info;
 	if (draw.display)
@@ -647,7 +657,7 @@ bool CBaseMenu::AppendItem(const char *info, const ItemDrawInfo &draw)
 bool CBaseMenu::InsertItem(unsigned int position, const char *info, const ItemDrawInfo &draw)
 {
 	if (m_Pagination == (unsigned)MENU_NO_PAGINATION &&
-	    m_items.length() >= m_pStyle->GetMaxPageItems())
+		m_items.length() >= m_pStyle->GetMaxPageItems())
 	{
 		return false;
 	}
@@ -655,7 +665,7 @@ bool CBaseMenu::InsertItem(unsigned int position, const char *info, const ItemDr
 	if (position >= m_items.length())
 		return false;
 
-	CItem item;
+	CItem item(position);
 	item.info = info;
 	if (draw.display)
 		item.display = new ke::AString(draw.display);
@@ -679,10 +689,15 @@ void CBaseMenu::RemoveAllItems()
 	m_items.clear();
 }
 
-const char *CBaseMenu::GetItemInfo(unsigned int position, ItemDrawInfo *draw/* =NULL */)
+const char *CBaseMenu::GetItemInfo(unsigned int position, ItemDrawInfo *draw/* =NULL */, int client/* =0 */)
 {
 	if (position >= m_items.length())
 		return NULL;
+
+	if (client > 0 && position < m_RandomMaps[client].length())
+	{
+		position = m_RandomMaps[client][position];
+	}
 
 	if (draw)
 	{
@@ -691,6 +706,62 @@ const char *CBaseMenu::GetItemInfo(unsigned int position, ItemDrawInfo *draw/* =
 	}
 
 	return m_items[position].info.chars();
+}
+
+void CBaseMenu::ShufflePerClient(int start, int stop)
+{
+	// limit map len to 255 items since it's using uint8
+	int length = MIN(GetItemCount(), 255);
+	if (stop >= 0)
+		length = MIN(length, stop);
+
+	for (int i = 1; i < SM_MAXPLAYERS + 1; i++)
+	{
+		// populate per-client map ...
+		m_RandomMaps[i].resize(length);
+		for (int j = 0; j < length; j++)
+			m_RandomMaps[i][j] = j;
+
+		// ... and random shuffle it
+		for (int j = length - 1; j > start; j--)
+		{
+			int x = rand() % (j - start + 1) + start;
+			uint8_t tmp = m_RandomMaps[i][x];
+			m_RandomMaps[i][x] = m_RandomMaps[i][j];
+			m_RandomMaps[i][j] = tmp;
+		}
+	}
+}
+
+void CBaseMenu::SetClientMapping(int client, int *array, int length)
+{
+	length = MIN(length, 255);
+	m_RandomMaps[client].resize(length);
+	for (int i = 0; i < length; i++)
+	{
+		m_RandomMaps[client][i] = array[i];
+	}
+}
+
+bool CBaseMenu::IsPerClientShuffled()
+{
+	for (int i = 1; i < SM_MAXPLAYERS + 1; i++)
+	{
+		if (m_RandomMaps[i].length() > 0)
+			return true;
+	}
+	return false;
+}
+
+unsigned int CBaseMenu::GetRealItemIndex(int client, unsigned int position)
+{
+	if (client > 0 && position < m_RandomMaps[client].length())
+	{
+		position = m_RandomMaps[client][position];
+		return m_items[position].index;
+	}
+
+	return position;
 }
 
 unsigned int CBaseMenu::GetItemCount()
@@ -783,7 +854,8 @@ void CBaseMenu::Destroy(bool releaseHandle)
 	{
 		Cancel();
 		InternalDelete();
-	} else {
+	}
+	else {
 		m_bShouldDelete = true;
 	}
 }

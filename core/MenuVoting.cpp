@@ -1,33 +1,33 @@
 /**
- * vim: set ts=4 sw=4 :
- * =============================================================================
- * SourceMod
- * Copyright (C) 2004-2009 AlliedModders LLC.  All rights reserved.
- * =============================================================================
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, version 3.0, as published by the
- * Free Software Foundation.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * As a special exception, AlliedModders LLC gives you permission to link the
- * code of this program (as well as its derivative works) to "Half-Life 2," the
- * "Source Engine," the "SourcePawn JIT," and any Game MODs that run on software
- * by the Valve Corporation.  You must obey the GNU General Public License in
- * all respects for all other code used.  Additionally, AlliedModders LLC grants
- * this exception to all derivative works.  AlliedModders LLC defines further
- * exceptions, found in LICENSE.txt (as of this writing, version JULY-31-2007),
- * or <http://www.sourcemod.net/license.php>.
- *
- * Version: $Id$
- */
+* vim: set ts=4 sw=4 :
+* =============================================================================
+* SourceMod
+* Copyright (C) 2004-2009 AlliedModders LLC.  All rights reserved.
+* =============================================================================
+*
+* This program is free software; you can redistribute it and/or modify it under
+* the terms of the GNU General Public License, version 3.0, as published by the
+* Free Software Foundation.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* You should have received a copy of the GNU General Public License along with
+* this program.  If not, see <http://www.gnu.org/licenses/>.
+*
+* As a special exception, AlliedModders LLC gives you permission to link the
+* code of this program (as well as its derivative works) to "Half-Life 2," the
+* "Source Engine," the "SourcePawn JIT," and any Game MODs that run on software
+* by the Valve Corporation.  You must obey the GNU General Public License in
+* all respects for all other code used.  Additionally, AlliedModders LLC grants
+* this exception to all derivative works.  AlliedModders LLC defines further
+* exceptions, found in LICENSE.txt (as of this writing, version JULY-31-2007),
+* or <http://www.sourcemod.net/license.php>.
+*
+* Version: $Id$
+*/
 
 #include <string.h>
 #include <stdlib.h>
@@ -47,41 +47,41 @@ float g_next_vote = 0.0f;
 #define VOTE_NOT_VOTING -2
 #define VOTE_PENDING -1
 
-ConVar sm_vote_hintbox("sm_vote_progress_hintbox", 
-					   "0", 
-					   0, 
-					   "Show current vote progress in a hint box",
-					   true,
-					   0.0,
-					   true,
-					   1.0);
+ConVar sm_vote_hintbox("sm_vote_progress_hintbox",
+	"0",
+	0,
+	"Show current vote progress in a hint box",
+	true,
+	0.0,
+	true,
+	1.0);
 
-ConVar sm_vote_chat("sm_vote_progress_chat", 
-					   "0", 
-					   0, 
-					   "Show current vote progress as chat messages",
-					   true,
-					   0.0,
-					   true,
-					   1.0);
+ConVar sm_vote_chat("sm_vote_progress_chat",
+	"0",
+	0,
+	"Show current vote progress as chat messages",
+	true,
+	0.0,
+	true,
+	1.0);
 
-ConVar sm_vote_console("sm_vote_progress_console", 
-					   "0", 
-					   0, 
-					   "Show current vote progress as console messages",
-					   true,
-					   0.0,
-					   true,
-					   1.0);
+ConVar sm_vote_console("sm_vote_progress_console",
+	"0",
+	0,
+	"Show current vote progress as console messages",
+	true,
+	0.0,
+	true,
+	1.0);
 
-ConVar sm_vote_client_console("sm_vote_progress_client_console", 
-					   "0", 
-					   0, 
-					   "Show current vote progress as console messages to clients",
-					   true,
-					   0.0,
-					   true,
-					   1.0);
+ConVar sm_vote_client_console("sm_vote_progress_client_console",
+	"0",
+	0,
+	"Show current vote progress as console messages to clients",
+	true,
+	0.0,
+	true,
+	1.0);
 
 
 #if SOURCE_ENGINE >= SE_ORANGEBOX
@@ -90,14 +90,14 @@ void OnVoteDelayChange(IConVar *cvar, const char *value, float flOldValue);
 void OnVoteDelayChange(ConVar *cvar, const char *value);
 #endif
 ConVar sm_vote_delay("sm_vote_delay",
-					 "30",
-					 0,
-					 "Sets the recommended time in between public votes",
-					 false,
-					 0.0,
-					 false,
-					 0.0,
-					 OnVoteDelayChange);
+	"30",
+	0,
+	"Sets the recommended time in between public votes",
+	false,
+	0.0,
+	false,
+	0.0,
+	OnVoteDelayChange);
 
 #if SOURCE_ENGINE >= SE_ORANGEBOX
 void OnVoteDelayChange(IConVar *cvar, const char *value, float flOldValue)
@@ -161,8 +161,8 @@ void VoteMenuHandler::OnClientDisconnected(int client)
 	}
 
 	/* Wipe out their vote if they had one.  We have to make sure the the the
-	 * newly connected client is not allowed to vote. 
-	 */
+	* newly connected client is not allowed to vote.
+	*/
 	int item;
 	if ((item = m_ClientVotes[client]) >= VOTE_PENDING)
 	{
@@ -182,19 +182,19 @@ bool VoteMenuHandler::IsVoteInProgress()
 }
 
 bool VoteMenuHandler::StartVote(IBaseMenu *menu,
-								unsigned int num_clients,
-								int clients[],
-								unsigned int max_time,
-								unsigned int flags/* =0 */)
+	unsigned int num_clients,
+	int clients[],
+	unsigned int max_time,
+	unsigned int flags/* =0 */)
 {
 	if (!InitializeVoting(menu, menu->GetHandler(), max_time, flags))
 	{
 		return false;
 	}
 
-	/* Note: we can use game time and not universal time because 
-	 * if we're voting then players are in-game.
-	 */
+	/* Note: we can use game time and not universal time because
+	* if we're voting then players are in-game.
+	*/
 
 	float fVoteDelay = sm_vote_delay.GetFloat();
 	if (fVoteDelay < 1.0)
@@ -204,16 +204,16 @@ bool VoteMenuHandler::StartVote(IBaseMenu *menu,
 	else
 	{
 		/* This little trick breaks for infinite votes!
-		 * However, we just ignore that since those 1) shouldn't exist and 
-		 * 2) people must be checking IsVoteInProgress() beforehand anyway.
-		 */
+		* However, we just ignore that since those 1) shouldn't exist and
+		* 2) people must be checking IsVoteInProgress() beforehand anyway.
+		*/
 		g_next_vote = gpGlobals->curtime + fVoteDelay + (float)max_time;
 	}
 
 	m_fStartTime = gpGlobals->curtime;
 	m_nMenuTime = max_time;
 
-	for (unsigned int i=0; i<num_clients; i++)
+	for (unsigned int i = 0; i<num_clients; i++)
 	{
 		if (clients[i] < 1 || clients[i] > 256)
 		{
@@ -229,8 +229,8 @@ bool VoteMenuHandler::StartVote(IBaseMenu *menu,
 
 bool VoteMenuHandler::IsClientInVotePool(int client)
 {
-	if (client < 1 
-		|| client > g_Players.MaxClients() 
+	if (client < 1
+		|| client > g_Players.MaxClients()
 		|| m_pCurMenu == NULL)
 	{
 		return false;
@@ -282,7 +282,7 @@ bool VoteMenuHandler::RedrawToClient(int client, bool revotes)
 	else
 	{
 		time_limit = (int)((float)m_nMenuTime - (gpGlobals->curtime - m_fStartTime));
-		
+
 		/* Make sure this doesn't round to zero */
 		if (time_limit == MENU_TIME_FOREVER)
 		{
@@ -293,10 +293,10 @@ bool VoteMenuHandler::RedrawToClient(int client, bool revotes)
 	return m_pCurMenu->Display(client, time_limit, this);
 }
 
-bool VoteMenuHandler::InitializeVoting(IBaseMenu *menu, 
-									   IMenuHandler *handler,
-									   unsigned int time,
-									   unsigned int flags)
+bool VoteMenuHandler::InitializeVoting(IBaseMenu *menu,
+	IMenuHandler *handler,
+	unsigned int time,
+	unsigned int flags)
 {
 	if (IsVoteInProgress())
 	{
@@ -306,7 +306,7 @@ bool VoteMenuHandler::InitializeVoting(IBaseMenu *menu,
 	InternalReset();
 
 	/* Mark all clients as not voting */
-	for (int i=1; i<=gpGlobals->maxClients; i++)
+	for (int i = 1; i <= gpGlobals->maxClients; i++)
 	{
 		m_ClientVotes[i] = VOTE_NOT_VOTING;
 		m_Revoting[i] = false;
@@ -318,7 +318,7 @@ bool VoteMenuHandler::InitializeVoting(IBaseMenu *menu,
 	{
 		/* Only clear the items we need to... */
 		size_t size = m_Votes.size();
-		for (size_t i=0; i<size; i++)
+		for (size_t i = 0; i<size; i++)
 		{
 			m_Votes[i] = 0;
 		}
@@ -326,7 +326,7 @@ bool VoteMenuHandler::InitializeVoting(IBaseMenu *menu,
 	}
 	else
 	{
-		for (unsigned int i=0; i<m_Items; i++)
+		for (unsigned int i = 0; i<m_Items; i++)
 		{
 			m_Votes[i] = 0;
 		}
@@ -353,11 +353,11 @@ void VoteMenuHandler::StartVoting()
 
 	m_pHandler->OnMenuVoteStart(m_pCurMenu);
 
-	m_displayTimer = g_Timers.CreateTimer(this, 1.0, NULL, TIMER_FLAG_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+	m_displayTimer = g_Timers.CreateTimer(this, 1.0, NULL, TIMER_FLAG_REPEAT | TIMER_FLAG_NO_MAPCHANGE);
 
-	/* By now we know how many clients were set.  
-	 * If there are none, we should end IMMEDIATELY.
-	 */
+	/* By now we know how many clients were set.
+	* If there are none, we should end IMMEDIATELY.
+	*/
 	if (m_Clients == 0)
 	{
 		EndVoting();
@@ -380,16 +380,16 @@ void VoteMenuHandler::DecrementPlayerCount()
 
 int SortVoteItems(const void *item1, const void *item2)
 {
-	return ((menu_vote_result_t::menu_item_vote_t *)item2)->count 
+	return ((menu_vote_result_t::menu_item_vote_t *)item2)->count
 		- ((menu_vote_result_t::menu_item_vote_t *)item1)->count;
 }
 
 void VoteMenuHandler::EndVoting()
 {
 	/* Set when the next delay ends.  We ignore cancellation because a menu
-	 * was, at one point, displayed, which is all that counts.  However, we
-	 * do re-calculate the time just in case the menu had no time limit.
-	 */
+	* was, at one point, displayed, which is all that counts.  However, we
+	* do re-calculate the time just in case the menu had no time limit.
+	*/
 	float fVoteDelay = sm_vote_delay.GetFloat();
 	if (fVoteDelay < 1.0)
 	{
@@ -408,9 +408,9 @@ void VoteMenuHandler::EndVoting()
 	if (m_bCancelled)
 	{
 		/* If we were cancelled, don't bother tabulating anything.
-		 * Reset just in case someone tries to redraw, which means
-		 * we need to save our states.
-		 */
+		* Reset just in case someone tries to redraw, which means
+		* we need to save our states.
+		*/
 		IBaseMenu *menu = m_pCurMenu;
 		IMenuHandler *handler = m_pHandler;
 		InternalReset();
@@ -426,7 +426,7 @@ void VoteMenuHandler::EndVoting()
 	memset(&vote, 0, sizeof(vote));
 
 	/* Build the item list */
-	for (unsigned int i=0; i<m_Items; i++)
+	for (unsigned int i = 0; i<m_Items; i++)
 	{
 		if (m_Votes[i] > 0)
 		{
@@ -449,7 +449,7 @@ void VoteMenuHandler::EndVoting()
 	}
 
 	/* Build the client list */
-	for (int i=1; i<=gpGlobals->maxClients; i++)
+	for (int i = 1; i <= gpGlobals->maxClients; i++)
 	{
 		if (m_ClientVotes[i] >= VOTE_PENDING)
 		{
@@ -467,8 +467,8 @@ void VoteMenuHandler::EndVoting()
 		SortVoteItems);
 
 	/* Save states, then clear what we've saved.
-	 * This makes us re-entrant, which is always the safe way to go.
-	 */
+	* This makes us re-entrant, which is always the safe way to go.
+	*/
 	IBaseMenu *menu = m_pCurMenu;
 	IMenuHandler *handler = m_pHandler;
 	InternalReset();
@@ -514,29 +514,30 @@ void VoteMenuHandler::OnMenuSelect(IBaseMenu *menu, int client, unsigned int ite
 	/* Check by our item count, NOT the vote array size */
 	if (item < m_Items)
 	{
-		m_ClientVotes[client] = item;
-		m_Votes[item]++;
+		unsigned int index = menu->GetRealItemIndex(client, item);
+		m_ClientVotes[client] = index;
+		m_Votes[index]++;
 		m_NumVotes++;
 
 		if (sm_vote_chat.GetBool() || sm_vote_console.GetBool() || sm_vote_client_console.GetBool())
 		{
 			static char buffer[1024];
 			ItemDrawInfo dr;
-			menu->GetItemInfo(item, &dr);
+			menu->GetItemInfo(item, &dr, client);
 
 			if (sm_vote_console.GetBool())
 			{
 				int target = SOURCEMOD_SERVER_LANGUAGE;
 				logicore.CoreTranslate(buffer, sizeof(buffer), "[SM] %T", 4, NULL, "Voted For",
-				                       &target, g_Players.GetPlayerByIndex(client)->GetName(), dr.display);
+					&target, g_Players.GetPlayerByIndex(client)->GetName(), dr.display);
 				Engine_LogPrintWrapper(buffer);
 			}
-			
+
 			if (sm_vote_chat.GetBool() || sm_vote_client_console.GetBool())
 			{
 				int maxclients = g_Players.GetMaxClients();
-				for (int i=1; i<=maxclients; i++)
-				{	
+				for (int i = 1; i <= maxclients; i++)
+				{
 					CPlayer *pPlayer = g_Players.GetPlayerByIndex(i);
 					assert(pPlayer);
 
@@ -545,12 +546,12 @@ void VoteMenuHandler::OnMenuSelect(IBaseMenu *menu, int client, unsigned int ite
 						if (m_Revoting[client])
 						{
 							logicore.CoreTranslate(buffer, sizeof(buffer), "[SM] %T", 4, NULL, "Changed Vote",
-							                       &i, g_Players.GetPlayerByIndex(client)->GetName(), dr.display);
+								&i, g_Players.GetPlayerByIndex(client)->GetName(), dr.display);
 						}
 						else
 						{
 							logicore.CoreTranslate(buffer, sizeof(buffer), "[SM] %T", 4, NULL, "Voted For",
-							                       &i, g_Players.GetPlayerByIndex(client)->GetName(), dr.display);
+								&i, g_Players.GetPlayerByIndex(client)->GetName(), dr.display);
 						}
 
 						if (sm_vote_chat.GetBool())
@@ -561,7 +562,7 @@ void VoteMenuHandler::OnMenuSelect(IBaseMenu *menu, int client, unsigned int ite
 						if (sm_vote_client_console.GetBool())
 						{
 							ClientConsolePrint(pPlayer->GetEdict(), buffer);
-						}		
+						}
 					}
 				}
 			}
@@ -632,14 +633,14 @@ void VoteMenuHandler::DrawHintProgress()
 	}
 
 	int iTimeRemaining = RoundFloatToInt(timeRemaining);
-	
+
 	int maxclients = g_Players.GetMaxClients();
-	for (int i=1; i<=maxclients; i++)
+	for (int i = 1; i <= maxclients; i++)
 	{
 		if (g_Players.GetPlayerByIndex(i)->IsInGame())
 		{
 			logicore.CoreTranslate(buffer, sizeof(buffer), "%T%s", 6, NULL, "Vote Count",
-			                       &i, &m_NumVotes, &m_TotalClients, &iTimeRemaining, &m_leaderList);
+				&i, &m_NumVotes, &m_TotalClients, &iTimeRemaining, &m_leaderList);
 			g_HL2.HintTextMsg(i, buffer);
 		}
 	}
@@ -658,7 +659,7 @@ void VoteMenuHandler::BuildVoteLeaders()
 	memset(&vote, 0, sizeof(vote));
 
 	/* Build the item list */
-	for (unsigned int i=0; i<m_Items; i++)
+	for (unsigned int i = 0; i<m_Items; i++)
 	{
 		if (m_Votes[i] > 0)
 		{
@@ -679,12 +680,12 @@ void VoteMenuHandler::BuildVoteLeaders()
 
 	/* Take the top 3 (if applicable) and draw them */
 	int len = 0;
-	for (unsigned int i=0; i<vote.num_items && i<3; i++)
+	for (unsigned int i = 0; i<vote.num_items && i<3; i++)
 	{
 		int curItem = vote.item_list[i].item;
 		ItemDrawInfo dr;
 		m_pCurMenu->GetItemInfo(curItem, &dr);
-		len += g_SourceMod.Format(m_leaderList + len, sizeof(m_leaderList) - len, "\n%i. %s: (%i)", i+1, dr.display, vote.item_list[i].count);
+		len += g_SourceMod.Format(m_leaderList + len, sizeof(m_leaderList) - len, "\n%i. %s: (%i)", i + 1, dr.display, vote.item_list[i].count);
 	}
 }
 

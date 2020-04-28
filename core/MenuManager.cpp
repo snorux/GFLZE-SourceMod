@@ -1,33 +1,33 @@
 /**
- * vim: set ts=4 :
- * =============================================================================
- * SourceMod
- * Copyright (C) 2004-2008 AlliedModders LLC.  All rights reserved.
- * =============================================================================
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, version 3.0, as published by the
- * Free Software Foundation.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * As a special exception, AlliedModders LLC gives you permission to link the
- * code of this program (as well as its derivative works) to "Half-Life 2," the
- * "Source Engine," the "SourcePawn JIT," and any Game MODs that run on software
- * by the Valve Corporation.  You must obey the GNU General Public License in
- * all respects for all other code used.  Additionally, AlliedModders LLC grants
- * this exception to all derivative works.  AlliedModders LLC defines further
- * exceptions, found in LICENSE.txt (as of this writing, version JULY-31-2007),
- * or <http://www.sourcemod.net/license.php>.
- *
- * Version: $Id$
- */
+* vim: set ts=4 :
+* =============================================================================
+* SourceMod
+* Copyright (C) 2004-2008 AlliedModders LLC.  All rights reserved.
+* =============================================================================
+*
+* This program is free software; you can redistribute it and/or modify it under
+* the terms of the GNU General Public License, version 3.0, as published by the
+* Free Software Foundation.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+* details.
+*
+* You should have received a copy of the GNU General Public License along with
+* this program.  If not, see <http://www.gnu.org/licenses/>.
+*
+* As a special exception, AlliedModders LLC gives you permission to link the
+* code of this program (as well as its derivative works) to "Half-Life 2," the
+* "Source Engine," the "SourcePawn JIT," and any Game MODs that run on software
+* by the Valve Corporation.  You must obey the GNU General Public License in
+* all respects for all other code used.  Additionally, AlliedModders LLC grants
+* this exception to all derivative works.  AlliedModders LLC defines further
+* exceptions, found in LICENSE.txt (as of this writing, version JULY-31-2007),
+* or <http://www.sourcemod.net/license.php>.
+*
+* Version: $Id$
+*/
 
 #include <time.h>
 #include <stdarg.h>
@@ -60,11 +60,11 @@ void MenuManager::OnSourceModAllInitialized()
 	handlesys->InitAccessDefaults(NULL, &access);
 
 	/* Deny cloning to menus */
-	access.access[HandleAccess_Clone] = HANDLE_RESTRICT_OWNER|HANDLE_RESTRICT_IDENTITY;
+	access.access[HandleAccess_Clone] = HANDLE_RESTRICT_OWNER | HANDLE_RESTRICT_IDENTITY;
 	m_MenuType = handlesys->CreateType("IBaseMenu", this, 0, NULL, &access, g_pCoreIdent, NULL);
 
 	/* Also deny deletion to styles */
-	access.access[HandleAccess_Delete] = HANDLE_RESTRICT_OWNER|HANDLE_RESTRICT_IDENTITY;
+	access.access[HandleAccess_Delete] = HANDLE_RESTRICT_OWNER | HANDLE_RESTRICT_IDENTITY;
 	m_StyleType = handlesys->CreateType("IMenuStyle", this, 0, NULL, &access, g_pCoreIdent, NULL);
 }
 
@@ -178,7 +178,7 @@ unsigned int MenuManager::GetStyleCount()
 IMenuStyle *MenuManager::FindStyleByName(const char *name)
 {
 	unsigned int count = GetStyleCount();
-	for (unsigned int i=0; i<count; i++)
+	for (unsigned int i = 0; i<count; i++)
 	{
 		IMenuStyle *ptr = GetStyle(i);
 		if (strcasecmp(ptr->GetStyleName(), name) == 0)
@@ -191,11 +191,11 @@ IMenuStyle *MenuManager::FindStyleByName(const char *name)
 }
 
 inline bool IsSlotItem(IMenuPanel *display,
-					   unsigned int style)
+	unsigned int style)
 {
 	if (!display->CanDrawItem(style))
 	{
-	return false;
+		return false;
 	}
 	if ((style & ITEMDRAW_IGNORE) == ITEMDRAW_IGNORE)
 	{
@@ -261,9 +261,9 @@ IMenuPanel *MenuManager::RenderMenu(int client, menu_states_t &md, ItemOrder ord
 		{
 			startItem = md.lastItem;
 			/* This shouldn't happen with well-coded menus.
-			 * If the item is out of bounds, switch the order to
-			 * Items_Descending and make us start from the top.
-			 */
+			* If the item is out of bounds, switch the order to
+			* Items_Descending and make us start from the top.
+			*/
 			if (startItem >= totalItems)
 			{
 				startItem = totalItems - 1;
@@ -274,9 +274,9 @@ IMenuPanel *MenuManager::RenderMenu(int client, menu_states_t &md, ItemOrder ord
 		{
 			startItem = md.firstItem;
 			/* This shouldn't happen with well-coded menus.
-			 * If searching backwards doesn't give us enough room,
-			 * start from the beginning and change to ascending.
-			 */
+			* If searching backwards doesn't give us enough room,
+			* start from the beginning and change to ascending.
+			*/
 			if (startItem <= maxItems)
 			{
 				startItem = 0;
@@ -297,18 +297,18 @@ IMenuPanel *MenuManager::RenderMenu(int client, menu_states_t &md, ItemOrder ord
 	}
 
 	/**
-	 * We keep searching until:
-	 * 1) There are no more items
-	 * 2) We reach one OVER the maximum number of slot items
-	 * 3) We have reached maxItems and pagination is MENU_NO_PAGINATION
-	 */
+	* We keep searching until:
+	* 1) There are no more items
+	* 2) We reach one OVER the maximum number of slot items
+	* 3) We have reached maxItems and pagination is MENU_NO_PAGINATION
+	*/
 	unsigned int i = startItem;
 	unsigned int foundItems = 0;
 	while (totalItems)
 	{
 		ItemDrawInfo &dr = drawItems[foundItems].draw;
 		/* Is the item valid? */
-		if (menu->GetItemInfo(i, &dr) != NULL)
+		if (menu->GetItemInfo(i, &dr, client) != NULL)
 		{
 			/* Ask the user to change the style, if necessary */
 			mh->OnMenuDrawItem(menu, client, i, dr.style);
@@ -316,9 +316,9 @@ IMenuPanel *MenuManager::RenderMenu(int client, menu_states_t &md, ItemOrder ord
 			if (IsSlotItem(panel, dr.style))
 			{
 				/* If we've already found the max number of items,
-				 * This means we should just cancel out and log our
-				 * "last item."
-				 */
+				* This means we should just cancel out and log our
+				* "last item."
+				*/
 				if (foundItems >= maxItems)
 				{
 					foundExtra = true;
@@ -345,7 +345,7 @@ IMenuPanel *MenuManager::RenderMenu(int client, menu_states_t &md, ItemOrder ord
 				break;
 			}
 			i--;
-		} 
+		}
 		/* If we're ascending and this is the last item, stop */
 		else if (order == ItemOrder_Ascending)
 		{
@@ -368,8 +368,8 @@ IMenuPanel *MenuManager::RenderMenu(int client, menu_states_t &md, ItemOrder ord
 	bool displayNext = false;
 
 	/* This is an annoying process.
-	 * Skip it for non-paginated menus, which get special treatment.
-	 */
+	* Skip it for non-paginated menus, which get special treatment.
+	*/
 	if (pgn != MENU_NO_PAGINATION)
 	{
 		if (foundExtra)
@@ -398,7 +398,7 @@ IMenuPanel *MenuManager::RenderMenu(int client, menu_states_t &md, ItemOrder ord
 			}
 			while (++lastItem < totalItems)
 			{
-				if (menu->GetItemInfo(lastItem, &dr) != NULL)
+				if (menu->GetItemInfo(lastItem, &dr, client) != NULL)
 				{
 					mh->OnMenuDrawItem(menu, client, lastItem, dr.style);
 					if (IsSlotItem(panel, dr.style))
@@ -420,7 +420,7 @@ IMenuPanel *MenuManager::RenderMenu(int client, menu_states_t &md, ItemOrder ord
 			lastItem--;
 			while (lastItem != 0)
 			{
-				if (menu->GetItemInfo(lastItem, &dr) != NULL)
+				if (menu->GetItemInfo(lastItem, &dr, client) != NULL)
 				{
 					mh->OnMenuDrawItem(menu, client, lastItem, dr.style);
 					if (IsSlotItem(panel, dr.style))
@@ -482,8 +482,8 @@ skip_search:
 	{
 		unsigned int i = foundItems;
 		/* NOTE: There will always be at least one item because
-		 * of the check earlier.
-		 */
+		* of the check earlier.
+		*/
 		md.item_on_page = drawItems[foundItems - 1].position;
 		while (i--)
 		{
@@ -510,7 +510,7 @@ skip_search:
 	/* Now, we need to check if we need to add anything extra */
 	if (pgn != MENU_NO_PAGINATION || exitButton)
 	{
-		bool canDrawDisabled = panel->CanDrawItem(ITEMDRAW_DISABLED|ITEMDRAW_CONTROL);
+		bool canDrawDisabled = panel->CanDrawItem(ITEMDRAW_DISABLED | ITEMDRAW_CONTROL);
 		bool exitBackButton = false;
 		char text[50];
 
@@ -522,7 +522,7 @@ skip_search:
 
 		/* Calculate how many items we are allowed for control stuff */
 		unsigned int padding = style->GetMaxPageItems() - maxItems;
-		
+
 		/* Add the number of available slots */
 		padding += (maxItems - foundItems);
 
@@ -531,10 +531,11 @@ skip_search:
 		if (!style->FeatureExists(MenuStyleFeature_ImplicitExit))
 		{
 #endif
-		/* Even if we don't draw an exit button, we invalidate the slot. */
-		padding--;
+			/* Even if we don't draw an exit button, we invalidate the slot. */
+			padding--;
 #if 0
-		} else {
+		}
+		else {
 			/* Otherwise, we don't draw anything and leave the slot available */
 			exitButton = false;
 		}
@@ -560,22 +561,22 @@ skip_search:
 		}
 
 		/**
-		 * We allow next/prev to be undrawn if neither exists.
-		 * Thus, we only need padding if one of them will be drawn,
-		 * or the exit button will be drawn.
-		 */
+		* We allow next/prev to be undrawn if neither exists.
+		* Thus, we only need padding if one of them will be drawn,
+		* or the exit button will be drawn.
+		*/
 		ItemDrawInfo padItem(NULL, ITEMDRAW_SPACER);
 		if (exitButton || (displayNext || displayPrev))
 		{
 			/* If there are no control options,
-			 * Instead just pad with invisible slots.
-			 */
+			* Instead just pad with invisible slots.
+			*/
 			if (!displayNext && !displayPrev)
 			{
 				padItem.style = ITEMDRAW_NOTEXT;
 			}
 			/* Add spacers so we can pad to the end */
-			for (unsigned int i=0; i<padding; i++)
+			for (unsigned int i = 0; i<padding; i++)
 			{
 				position = panel->DrawItem(padItem);
 				slots[position].type = ItemSel_None;
@@ -585,21 +586,21 @@ skip_search:
 		/* Put a fake spacer before control stuff, if possible */
 		if ((displayPrev || displayNext) || exitButton)
 		{
-			ItemDrawInfo draw("", ITEMDRAW_RAWLINE|ITEMDRAW_SPACER);
+			ItemDrawInfo draw("", ITEMDRAW_RAWLINE | ITEMDRAW_SPACER);
 			panel->DrawItem(draw);
 		}
 
 		ItemDrawInfo dr(text, 0);
 
 		/**
-		 * If we have one or the other, we need to have spacers for both.
-		 */
+		* If we have one or the other, we need to have spacers for both.
+		*/
 		if (pgn != MENU_NO_PAGINATION)
 		{
 			if (displayPrev || displayNext)
 			{
 				/* PREVIOUS */
-				ItemDrawInfo padCtrlItem(NULL, ITEMDRAW_SPACER|ITEMDRAW_CONTROL);
+				ItemDrawInfo padCtrlItem(NULL, ITEMDRAW_SPACER | ITEMDRAW_CONTROL);
 				if (displayPrev || canDrawDisabled)
 				{
 					if (exitBackButton)
@@ -618,7 +619,7 @@ skip_search:
 						{
 							ke::SafeStrcpy(text, sizeof(text), "Previous");
 						}
-						dr.style = (displayPrev ? 0 : ITEMDRAW_DISABLED)|ITEMDRAW_CONTROL;
+						dr.style = (displayPrev ? 0 : ITEMDRAW_DISABLED) | ITEMDRAW_CONTROL;
 						position = panel->DrawItem(dr);
 						slots[position].type = ItemSel_Back;
 					}
@@ -626,8 +627,8 @@ skip_search:
 				else if (displayNext || exitButton)
 				{
 					/* If we can't display this, and there is an exit button,
-					 * we need to pad!
-					 */
+					* we need to pad!
+					*/
 					position = panel->DrawItem(padCtrlItem);
 					slots[position].type = ItemSel_None;
 				}
@@ -639,15 +640,15 @@ skip_search:
 					{
 						ke::SafeStrcpy(text, sizeof(text), "Next");
 					}
-					dr.style = (displayNext ? 0 : ITEMDRAW_DISABLED)|ITEMDRAW_CONTROL;
+					dr.style = (displayNext ? 0 : ITEMDRAW_DISABLED) | ITEMDRAW_CONTROL;
 					position = panel->DrawItem(dr);
 					slots[position].type = ItemSel_Next;
 				}
 				else if (exitButton)
 				{
 					/* If we can't display this,
-					 * but there is an "exit" button, we need to pad!
-					 */
+					* but there is an "exit" button, we need to pad!
+					*/
 					position = panel->DrawItem(padCtrlItem);
 					slots[position].type = ItemSel_None;
 				}
@@ -700,19 +701,21 @@ bool MenuManager::MenuSoundsEnabled()
 }
 
 ConfigResult MenuManager::OnSourceModConfigChanged(const char *key,
-												   const char *value,
-												   ConfigSource source,
-												   char *error,
-												   size_t maxlength)
+	const char *value,
+	ConfigSource source,
+	char *error,
+	size_t maxlength)
 {
 	if (strcmp(key, "MenuItemSound") == 0)
 	{
 		m_SelectSound.assign(value);
 		return ConfigResult_Accept;
-	} else if (strcmp(key, "MenuExitBackSound") == 0) {
+	}
+	else if (strcmp(key, "MenuExitBackSound") == 0) {
 		m_ExitBackSound.assign(value);
 		return ConfigResult_Accept;
-	} else if (strcmp(key, "MenuExitSound") == 0) {
+	}
+	else if (strcmp(key, "MenuExitSound") == 0) {
 		m_ExitSound.assign(value);
 		return ConfigResult_Accept;
 	}
@@ -729,33 +732,33 @@ const char *MenuManager::GetMenuSound(ItemSelection sel)
 	case ItemSel_Back:
 	case ItemSel_Next:
 	case ItemSel_Item:
+	{
+		if (m_SelectSound.size() > 0)
 		{
-			if (m_SelectSound.size() > 0)
-			{
-				sound = m_SelectSound.c_str();
-			}
-			break;
+			sound = m_SelectSound.c_str();
 		}
+		break;
+	}
 	case ItemSel_ExitBack:
+	{
+		if (m_ExitBackSound.size() > 0)
 		{
-			if (m_ExitBackSound.size() > 0)
-			{
-				sound = m_ExitBackSound.c_str();
-			}
-			break;
+			sound = m_ExitBackSound.c_str();
 		}
+		break;
+	}
 	case ItemSel_Exit:
+	{
+		if (m_ExitSound.size() > 0)
 		{
-			if (m_ExitSound.size() > 0)
-			{
-				sound = m_ExitSound.c_str();
-			}
-			break;
+			sound = m_ExitSound.c_str();
 		}
+		break;
+	}
 	default:
-		{
-			break;
-		}
+	{
+		break;
+	}
 	}
 
 	return sound;
@@ -823,4 +826,3 @@ bool MenuManager::RedrawClientVoteMenu2(int client, bool revote)
 {
 	return s_VoteHandler.RedrawToClient(client, revote);
 }
-
